@@ -14,19 +14,15 @@ export default function Home() {
   // Fixed UTC timestamp: July 10, 2025 @ 12:00 UTC
   const targetDate = new Date(Date.UTC(2025, 6, 10, 12, 0, 0));
 
-  // State for the remaining time
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
-
-  // State for mute toggle
   const [muted, setMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Calculate and tick down every second
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.muted = muted;
@@ -36,7 +32,6 @@ export default function Home() {
     const update = () => {
       const now = Date.now();
       const diff = Math.max(targetDate.getTime() - now, 0);
-
       setTimeLeft({
         days:    Math.floor(diff / (1000 * 60 * 60 * 24)),
         hours:   Math.floor((diff / (1000 * 60 * 60)) % 24),
@@ -50,7 +45,6 @@ export default function Home() {
     return () => clearInterval(id);
   }, [muted]);
 
-  // Sync mute state to audio element
   useEffect(() => {
     if (audioRef.current) audioRef.current.muted = muted;
   }, [muted]);
@@ -63,19 +57,16 @@ export default function Home() {
       </Head>
 
       <div className="relative min-h-screen w-full overflow-hidden">
-        {/* Background audio */}
         <audio ref={audioRef} src="/sound.mp3" autoPlay loop />
 
-        {/* Mute/unmute */}
         <button
-          onClick={() => setMuted((prev) => !prev)}
-          className="absolute top-6 right-6 z-20 p-3 bg-black/40 backdrop-blur-sm rounded-full text-white text-2xl"
+          onClick={() => setMuted((p) => !p)}
+          className="absolute top-4 right-4 z-20 p-2 bg-black/40 backdrop-blur-sm rounded-full text-white text-lg"
           aria-label={muted ? 'Unmute' : 'Mute'}
         >
           {muted ? '🔇' : '🔊'}
         </button>
 
-        {/* Video background */}
         <video
           autoPlay
           loop
@@ -86,10 +77,9 @@ export default function Home() {
           <source src="/video-bg.mp4" type="video/mp4" />
         </video>
 
-        {/* Bottom stack: countdown → socials → whitelist */}
-        <div className="absolute bottom-8 left-0 w-full flex flex-col items-center space-y-10 z-10 px-4">
-          {/* Countdown */}
-          <div className="bg-black/70 backdrop-blur-sm rounded-2xl px-6 py-5 flex gap-8 text-white">
+        <div className="absolute bottom-6 left-0 w-full flex flex-col items-center space-y-6 z-10 px-4">
+          {/* Smaller countdown */}
+          <div className="bg-black/70 backdrop-blur-sm rounded-xl px-4 py-3 flex gap-4 text-white">
             {(['Days','Hours','Mins','Secs'] as const).map((label, i) => {
               const val = [
                 timeLeft.days,
@@ -99,27 +89,27 @@ export default function Home() {
               ][i];
               return (
                 <div key={label} className="flex flex-col items-center">
-                  <span className="text-5xl md:text-6xl font-extrabold">
+                  <span className="text-3xl md:text-4xl font-bold">
                     {String(val).padStart(2, '0')}
                   </span>
-                  <span className="uppercase text-sm tracking-wide">{label}</span>
+                  <span className="uppercase text-xs">{label}</span>
                 </div>
               );
             })}
           </div>
 
-          {/* Social buttons */}
-          <div className="flex flex-wrap justify-center gap-6">
+          {/* Compact social buttons */}
+          <div className="flex flex-wrap justify-center gap-4">
             <a
               href="https://x.com/CatCentsio/"
               target="_blank"
               rel="noopener noreferrer"
               className="
-                px-8 py-3 font-semibold rounded-full
+                px-4 py-1 text-xs font-semibold rounded-full
                 bg-gradient-to-br from-blue-400 to-blue-600
-                text-white shadow-lg
-                hover:scale-105 hover:from-blue-300 hover:to-blue-500
-                transition-transform duration-300
+                text-white shadow
+                hover:scale-105
+                transition-transform
               "
             >
               Follow on X
@@ -129,30 +119,30 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
               className="
-                px-8 py-3 font-semibold rounded-full
+                px-4 py-1 text-xs font-semibold rounded-full
                 bg-gradient-to-br from-indigo-500 to-indigo-700
-                text-white shadow-lg
-                hover:scale-105 hover:from-indigo-400 hover:to-indigo-600
-                transition-transform duration-300
+                text-white shadow
+                hover:scale-105
+                transition-transform
               "
             >
               Join Discord
             </a>
           </div>
 
-          {/* Check whitelist */}
+          {/* Smaller whitelist button */}
           <a
             href="https://meowlab.catcents.io/"
             target="_blank"
             rel="noopener noreferrer"
             className="
-              px-10 py-4 font-bold rounded-full
+              px-6 py-2 text-sm font-bold rounded-full
               bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500
-              text-white uppercase tracking-wider
-              shadow-2xl
+              text-white uppercase tracking-wide
+              shadow-lg
               animate-pulse hover:animate-none
-              hover:-translate-y-1 hover:scale-110
-              transition-all duration-300
+              hover:-translate-y-0.5 hover:scale-105
+              transition-all
             "
           >
             Check Whitelist
