@@ -12,7 +12,7 @@ interface TimeLeft {
 
 export default function Home() {
   // Fixed UTC timestamp: July 10, 2025 @ 12:00 UTC
-  const targetDate = new Date(Date.UTC(2025, 6, 10, 12, 0, 0));
+  const targetDate = new Date(Date.UTC(2025, 6, 10, 14, 0, 0));
 
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
